@@ -1,15 +1,22 @@
-import { ChangeEvent, useState, VFC } from 'react';
+import { ChangeEvent, useState, MouseEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useFetchClasses from '../../hooks/useFetchClasses';
 
 import './styles.scss';
 
-const App: VFC = () => {
+const Home = () => {
   const [search, setSearch] = useState('');
   const { data } = useFetchClasses();
+  const navigate = useNavigate();
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+  };
+
+  const handleClassClick = (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>, id: number) => {
+    e.preventDefault();
+    navigate(`/detail/${id}`);
   };
 
   const filteredData = data.filter(
@@ -24,7 +31,7 @@ const App: VFC = () => {
       <div className="class-container mb-4 px-2">
         {
           filteredData.map((item) => (
-            <div key={item.id} className="class p-2 mb-3">
+            <div key={item.id} className="class p-2 mb-3" onClick={(e) => handleClassClick(e, item.id)} role="presentation">
               <p className="title">
                 {item.name}
               </p>
@@ -37,4 +44,4 @@ const App: VFC = () => {
   );
 };
 
-export default App;
+export default Home;
